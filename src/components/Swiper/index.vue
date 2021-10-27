@@ -4,9 +4,9 @@
     <div
       class="swiper-container"
       ref="swiper-container"
-      @mouseup="mouseup"
-      @mousemove="mousemove"
-      @mousedown="mousedown"
+      @touchend="touchend"
+      @touchmove="touchmove"
+      @touchstart="touchstart"
     >
       <!-- 滑块 -->
       <div class="swiper-item" v-for="item in data" :key="item">{{ item }}</div>
@@ -20,23 +20,43 @@ export default {
   data() {
     return {
       data: [1, 2, 3, 4],
-      curIndex: 1,
+      curIndex: 0,
+      startX: 0,
+      distance: 0,
+      sumWidth: 0,
     };
   },
   mounted() {
     this.swiper = this.$refs["swiper-container"];
   },
   methods: {
-    mouseup() {
-      // console.log("鼠标抬起", e);
-      this.swiper.style.left = this.curIndex * -300 + "px";
-      this.curIndex += 1;
+    touchend() {
+      if (this.distance > 50) {
+        console.log("rtl");
+        this.movePage("rtl");
+      } else if (this.distance < -50) {
+        console.log("ltr");
+        this.movePage("ltr");
+      }
     },
-    mousemove() {
-      // console.log('鼠标移动');
+    touchmove(e) {
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
+      this.distance = this.startX - e.changedTouches[0].pageX;
     },
-    mousedown(e) {
-      console.log("鼠标按下", e);
+    touchstart(e) {
+      this.startX = e.touches[0].pageX;
+    },
+    movePage(type, width = 300) {
+      if (type === "rtl" && this.curIndex < this.data.length - 1) {
+        this.curIndex += 1;
+      }
+      if (type === "ltr" && this.curIndex > 0) {
+        this.curIndex -= 1;
+      }
+      this.sumWidth = -this.curIndex * width;
+      this.swiper.style.left = this.sumWidth + "px";
     },
   },
 };
