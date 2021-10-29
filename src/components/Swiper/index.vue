@@ -17,23 +17,27 @@
         <div
           class="swiper-item"
           ref="swiper-item"
-          v-for="item in data"
+          v-for="item in list"
           :key="item"
+          :style="{
+            width: `calc(${100 / pageSize}% - ${space}px)`,
+            marginRight: `${space}px`,
+          }"
         >
           {{ item }}
         </div>
       </div>
     </div>
     <!-- 左右按钮 -->
-    <template>
+    <template v-if="showBtn">
       <div class="swiper-btn-prev" @click="turn('prev')"></div>
       <div class="swiper-btn-next" @click="turn('next')"></div>
     </template>
     <!-- 导航按钮 -->
-    <template>
+    <template v-if="showNav">
       <ul class="nav-list">
         <li
-          v-for="(item, navIndex) in data"
+          v-for="(item, navIndex) in navCount"
           :key="'nav-' + item"
           :class="[index === navIndex && 'active']"
           @click="turnTopage(navIndex)"
@@ -61,30 +65,53 @@ export default {
       // 轮播数组
       type: Array,
       default: () => [],
+      required: true,
     },
     pageSize: {
       // 一屏展示个数
       type: Number,
       default: 1,
     },
+    showNav: {
+      // 是否展示导航
+      type: Boolean,
+      default: false,
+    },
+    showBtn: {
+      // 是否展示左右按钮
+      type: Boolean,
+      default: false,
+    },
+    space: {
+      // 滑
+      type: Number,
+      default: 0,
+      validator: function (value) {
+        return value >= 0;
+      },
+    },
   },
   data() {
     return {
-      data: [1, 2, 3, 4, 5],
       index: 0, // 当前滑块的索引值
       status: 0, // 状态值，是否跟随鼠标移动
       oldX: 0, // 起点坐标
       newX: 0, // 新坐标
+      navCount: 1, // 导航栏个数
     };
   },
   mounted() {
     this.swiper = this.$refs["swiper-container"]; // 滑动容器
-    this.itemContainer = this.$refs["swiper-item"]; // 滑块集合
-    this.itemWidth = this.itemContainer[0].offsetWidth; // 单个滑块的宽度
+    this.itemArr = this.$refs["swiper-item"]; // 滑块集合
+    this.navCount =
+      this.itemArr.length - (this.pageSize - 1) <= 0
+        ? 1
+        : this.itemArr.length - (this.pageSize - 1);
+    this.itemWidth = this.itemArr[0].offsetWidth + this.space; // 单个滑块的宽度
     this.left = 0 - this.itemWidth * this.index; // 容器的初始left值
     this.swiper.style.left = this.left + "px"; // 设置容器的初始位置
     this.isMobile = "ontouchstart" in window; // 判断移动端还是pc端
-    this.autoPlay();
+    this.autoplay && this.autoPlay();
   },
   methods: {
     // 开始触摸/鼠标按下
@@ -121,11 +148,31 @@ export default {
       }
       if (this.index < 0) {
         this.index = 0;
-      } else if (this.index > this.itemContainer.length - 1) {
-        this.index = this.itemContainer.length - 1;
+      } else if (this.index > this.navCount - 1) {
+        this.index = this.navCount - 1;
       }
       this.move();
-      this.autoPlay();
+      this.autoplay && this.autoPlay();
+    },
+    // 左右按钮切换
+    turn(type) {
+      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
+      this.autoplay && this.autoPlay();
+      if (type === "next") {
+        if (this.index >= this.navCount - 1) return;
+        this.index++;
+      } else if (type === "prev") {
+        if (this.index <= 0) return;
+        this.index--;
+      }
+      this.move();
+    },
+    // 跳转到指定位置
+    turnTopage(index) {
+      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
+      this.index = index;
+      this.move();
+      this.autoplay && this.autoPlay();
     },
     // 滑动
     move() {
@@ -141,31 +188,11 @@ export default {
       this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
       this.swiperAutoTimer = setInterval(() => {
         this.index++;
-        if (this.index > this.itemContainer.length - 1) {
+        if (this.index > this.navCount - 1) {
           this.index = 0;
         }
         this.move();
-      }, 3000);
-    },
-    // 左右按钮切换
-    turn(type) {
-      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
-      if (type === "next") {
-        if (this.index >= this.itemContainer.length - 1) return;
-        this.index++;
-      } else if (type === "prev") {
-        if (this.index <= 0) return;
-        this.index--;
-      }
-      this.move();
-      this.autoPlay();
-    },
-    // 跳转到指定位置
-    turnTopage(index) {
-      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
-      this.index = index;
-      this.move();
-      this.autoPlay();
+      }, this.duration);
     },
   },
 };
@@ -189,7 +216,7 @@ export default {
       left: 0px;
       .swiper-item {
         flex-shrink: 0;
-        width: 300px;
+        width: 100px;
         height: 100px;
         background: #eee;
       }
