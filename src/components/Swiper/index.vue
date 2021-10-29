@@ -1,7 +1,8 @@
 <template>
   <div class="swiper-main">
+    <!-- 轮播盒子 -->
     <div class="swiper">
-      <!-- 容器 -->
+      <!-- 移动容器 -->
       <div
         class="swiper-container"
         ref="swiper-container"
@@ -23,8 +24,22 @@
         </div>
       </div>
     </div>
-    <div class="swiper-btn-prev" @click="turn('prev')"></div>
-    <div class="swiper-btn-next" @click="turn('next')"></div>
+    <!-- 左右按钮 -->
+    <template>
+      <div class="swiper-btn-prev" @click="turn('prev')"></div>
+      <div class="swiper-btn-next" @click="turn('next')"></div>
+    </template>
+    <!-- 导航按钮 -->
+    <template>
+      <ul class="nav-list">
+        <li
+          v-for="(item, navIndex) in data"
+          :key="'nav-' + item"
+          :class="[index === navIndex && 'active']"
+          @click="turnTopage(navIndex)"
+        ></li>
+      </ul>
+    </template>
   </div>
 </template>
 
@@ -33,16 +48,24 @@ export default {
   name: "swiper",
   props: {
     duration: {
+      //自动轮播切换时延
       type: Number,
-      default: 2000,
+      default: 3000,
     },
     autoplay: {
+      // 是否开启自动播放
       type: Boolean,
       default: false,
     },
     list: {
+      // 轮播数组
       type: Array,
       default: () => [],
+    },
+    pageSize: {
+      // 一屏展示个数
+      type: Number,
+      default: 1,
     },
   },
   data() {
@@ -64,6 +87,7 @@ export default {
     this.autoPlay();
   },
   methods: {
+    // 开始触摸/鼠标按下
     touchstart(e) {
       this.status = 1;
       this.oldX = this.startX = this.isMobile
@@ -71,6 +95,7 @@ export default {
         : e.pageX; // 开始坐标
       this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
     },
+    // 手指触摸/鼠标 滑动
     touchmove(e) {
       if (e && e.preventDefault) {
         e.preventDefault();
@@ -85,6 +110,7 @@ export default {
       this.oldX = this.newX;
       this.swiper.style.left = this.left + "px";
     },
+    // 手指触摸结束/鼠标抬起
     touchend(e) {
       this.status = 0;
       const pageX = this.isMobile ? e.changedTouches[0].pageX : e.pageX;
@@ -99,7 +125,9 @@ export default {
         this.index = this.itemContainer.length - 1;
       }
       this.move();
+      this.autoPlay();
     },
+    // 滑动
     move() {
       this.swiper.className += " move";
       this.swiper.addEventListener("transitionend", () => {
@@ -107,8 +135,8 @@ export default {
       });
       this.left = 0 - this.itemWidth * this.index;
       this.swiper.style.left = this.left + "px";
-      this.autoPlay();
     },
+    // 自动切换
     autoPlay() {
       this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
       this.swiperAutoTimer = setInterval(() => {
@@ -119,6 +147,7 @@ export default {
         this.move();
       }, 3000);
     },
+    // 左右按钮切换
     turn(type) {
       this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
       if (type === "next") {
@@ -129,6 +158,14 @@ export default {
         this.index--;
       }
       this.move();
+      this.autoPlay();
+    },
+    // 跳转到指定位置
+    turnTopage(index) {
+      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
+      this.index = index;
+      this.move();
+      this.autoPlay();
     },
   },
 };
@@ -163,6 +200,7 @@ export default {
   }
   .swiper-btn-prev {
     position: absolute;
+    cursor: pointer;
     left: -12px;
     top: calc(50% - 8px);
     transform: translateY(-50%);
@@ -175,6 +213,7 @@ export default {
   }
   .swiper-btn-next {
     position: absolute;
+    cursor: pointer;
     right: -12px;
     top: calc(50% - 8px);
     transform: translateY(-50%);
@@ -184,6 +223,24 @@ export default {
     border-right-color: transparent;
     border-top-color: transparent;
     transform: rotate(-135deg);
+  }
+  .nav-list {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    display: flex;
+    transform: translateX(-50%);
+    li {
+      cursor: pointer;
+      width: 10px;
+      height: 10px;
+      background-color: rgb(210, 210, 210);
+      margin: 0 5px;
+      border-radius: 5px;
+      &.active {
+        background-color: #f60;
+      }
+    }
   }
 }
 </style>
