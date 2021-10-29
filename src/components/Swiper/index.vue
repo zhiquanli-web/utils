@@ -8,7 +8,9 @@
         @touchend="touchend"
         @touchmove="touchmove"
         @touchstart="touchstart"
-        @mouseover="mouseover"
+        @mousedown="touchstart"
+        @mousemove="touchmove"
+        @mouseup="touchend"
       >
         <!-- 滑块 -->
         <div
@@ -58,12 +60,15 @@ export default {
     this.itemWidth = this.itemContainer[0].offsetWidth; // 单个滑块的宽度
     this.left = 0 - this.itemWidth * this.index; // 容器的初始left值
     this.swiper.style.left = this.left + "px"; // 设置容器的初始位置
+    this.isMobile = "ontouchstart" in window; // 判断移动端还是pc端
     this.autoPlay();
   },
   methods: {
     touchstart(e) {
       this.status = 1;
-      this.oldX = this.startX = e.targetTouches[0].pageX; // 开始坐标
+      this.oldX = this.startX = this.isMobile
+        ? e.targetTouches[0].pageX
+        : e.pageX; // 开始坐标
       this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
     },
     touchmove(e) {
@@ -71,7 +76,7 @@ export default {
         e.preventDefault();
       }
       if (this.status !== 1) return;
-      this.newX = e.changedTouches[0].pageX;
+      this.newX = this.isMobile ? e.changedTouches[0].pageX : e.pageX;
       if (this.newX < this.oldX) {
         this.left -= this.oldX - this.newX;
       } else {
@@ -82,7 +87,8 @@ export default {
     },
     touchend(e) {
       this.status = 0;
-      if (e.changedTouches[0].pageX < this.startX) {
+      const pageX = this.isMobile ? e.changedTouches[0].pageX : e.pageX;
+      if (pageX < this.startX) {
         this.index++;
       } else {
         this.index--;
@@ -93,8 +99,6 @@ export default {
         this.index = this.itemContainer.length - 1;
       }
       this.move();
-      this.continue && clearTimeout(this.continue);
-      this.autoPlay();
     },
     move() {
       this.swiper.className += " move";
@@ -103,6 +107,7 @@ export default {
       });
       this.left = 0 - this.itemWidth * this.index;
       this.swiper.style.left = this.left + "px";
+      this.autoPlay();
     },
     autoPlay() {
       this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
@@ -112,9 +117,10 @@ export default {
           this.index = 0;
         }
         this.move();
-      }, 2000);
+      }, 3000);
     },
     turn(type) {
+      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
       if (type === "next") {
         if (this.index >= this.itemContainer.length - 1) return;
         this.index++;
