@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <Swiper :list="data" :pageSize="pageSize" :space="space" />
+    <Swiper :list="data" />
   </div>
 </template>
 
@@ -13,8 +13,6 @@ export default {
   data() {
     return {
       data: [1, 2, 3],
-      pageSize: 3,
-      space: 10,
     };
   },
 };

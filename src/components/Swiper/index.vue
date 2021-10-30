@@ -20,7 +20,9 @@
           v-for="item in list"
           :key="item"
           :style="{
-            width: `calc(${100 / pageSize}% - ${space}px)`,
+            width:
+              Math.ceil((swiperWidth - space * (pageSize - 1)) / pageSize) +
+              'px',
             marginRight: `${space}px`,
           }"
         >
@@ -83,7 +85,7 @@ export default {
       default: false,
     },
     space: {
-      // 滑
+      // 滑块间间隔距离
       type: Number,
       default: 0,
       validator: function (value) {
@@ -98,20 +100,24 @@ export default {
       oldX: 0, // 起点坐标
       newX: 0, // 新坐标
       navCount: 1, // 导航栏个数
+      swiperWidth: "100%", //容器默认宽度
     };
   },
   mounted() {
     this.swiper = this.$refs["swiper-container"]; // 滑动容器
+    this.swiperWidth = this.swiper.offsetWidth;
     this.itemArr = this.$refs["swiper-item"]; // 滑块集合
-    this.navCount =
-      this.itemArr.length - (this.pageSize - 1) <= 0
-        ? 1
-        : this.itemArr.length - (this.pageSize - 1);
-    this.itemWidth = this.itemArr[0].offsetWidth + this.space; // 单个滑块的宽度
-    this.left = 0 - this.itemWidth * this.index; // 容器的初始left值
-    this.swiper.style.left = this.left + "px"; // 设置容器的初始位置
-    this.isMobile = "ontouchstart" in window; // 判断移动端还是pc端
-    this.autoplay && this.autoPlay();
+    this.$nextTick(() => {
+      this.navCount =
+        this.itemArr.length - (this.pageSize - 1) <= 0
+          ? 1
+          : this.itemArr.length - (this.pageSize - 1);
+      this.itemWidth = Math.ceil(this.itemArr[0].offsetWidth + this.space); // 单个滑块的宽度
+      this.left = 0 - this.itemWidth * this.index; // 容器的初始left值
+      this.swiper.style.left = this.left + "px"; // 设置容器的初始位置
+      this.isMobile = "ontouchstart" in window; // 判断移动端还是pc端
+      this.autoplay && this.autoPlay();
+    });
   },
   methods: {
     // 开始触摸/鼠标按下
