@@ -1,61 +1,134 @@
 <template>
-  <div class="swiper">
-    <!-- 容器 -->
-    <div
-      class="swiper-container"
-      ref="swiper-container"
-      @mouseup="mouseup"
-      @mousemove="mousemove"
-      @mousedown="mousedown"
-      @mouseout="mouseout"
-      @mouseover="mouseover"
-    >
-      <!-- 滑块 -->
+  <div class="swiper-main">
+    <!-- 轮播盒子 -->
+    <div class="swiper">
+      <!-- 移动容器 -->
       <div
-        class="swiper-item"
-        ref="swiper-item"
-        v-for="item in data"
-        :key="item"
+        class="swiper-container"
+        ref="swiper-container"
+        @touchend="touchend"
+        @touchmove="touchmove"
+        @touchstart="touchstart"
+        @mousedown="touchstart"
+        @mousemove="touchmove"
+        @mouseup="touchend"
       >
-        {{ item }}
+        <!-- 滑块 -->
+        <div
+          class="swiper-item"
+          ref="swiper-item"
+          v-for="item in list"
+          :key="item"
+          :style="{
+            width: `calc(${100 / pageSize}% - ${space}px)`,
+            marginRight: `${space}px`,
+          }"
+        >
+          {{ item }}
+        </div>
       </div>
     </div>
+    <!-- 左右按钮 -->
+    <template v-if="showBtn">
+      <div class="swiper-btn-prev" @click="turn('prev')"></div>
+      <div class="swiper-btn-next" @click="turn('next')"></div>
+    </template>
+    <!-- 导航按钮 -->
+    <template v-if="showNav">
+      <ul class="nav-list">
+        <li
+          v-for="(item, navIndex) in navCount"
+          :key="'nav-' + item"
+          :class="[index === navIndex && 'active']"
+          @click="turnTopage(navIndex)"
+        ></li>
+      </ul>
+    </template>
   </div>
 </template>
 
 <script>
 export default {
   name: "swiper",
+  props: {
+    duration: {
+      //自动轮播切换时延
+      type: Number,
+      default: 3000,
+    },
+    autoplay: {
+      // 是否开启自动播放
+      type: Boolean,
+      default: false,
+    },
+    list: {
+      // 轮播数组
+      type: Array,
+      default: () => [],
+      required: true,
+    },
+    pageSize: {
+      // 一屏展示个数
+      type: Number,
+      default: 1,
+    },
+    showNav: {
+      // 是否展示导航
+      type: Boolean,
+      default: false,
+    },
+    showBtn: {
+      // 是否展示左右按钮
+      type: Boolean,
+      default: false,
+    },
+    space: {
+      // 滑
+      type: Number,
+      default: 0,
+      validator: function (value) {
+        return value >= 0;
+      },
+    },
+  },
   data() {
     return {
-      data: [1, 2, 3, 4],
       index: 0, // 当前滑块的索引值
       status: 0, // 状态值，是否跟随鼠标移动
       oldX: 0, // 起点坐标
       newX: 0, // 新坐标
+      navCount: 1, // 导航栏个数
     };
   },
   mounted() {
-    // 滑动容器
-    this.swiper = this.$refs["swiper-container"];
-    this.itemContainer = this.$refs["swiper-item"]; // 滑动块
-    this.itemWidth = this.itemContainer[0].offsetWidth; // 单个滑块的宽度
-    this.left = 0 - this.itemWidth * this.index; // 容器的出事left值
-    // 设置容器的初始位置
-    this.swiper.style.left = this.left + "px";
-    this.autoMove();
+    this.swiper = this.$refs["swiper-container"]; // 滑动容器
+    this.itemArr = this.$refs["swiper-item"]; // 滑块集合
+    this.navCount =
+      this.itemArr.length - (this.pageSize - 1) <= 0
+        ? 1
+        : this.itemArr.length - (this.pageSize - 1);
+    this.itemWidth = this.itemArr[0].offsetWidth + this.space; // 单个滑块的宽度
+    this.left = 0 - this.itemWidth * this.index; // 容器的初始left值
+    this.swiper.style.left = this.left + "px"; // 设置容器的初始位置
+    this.isMobile = "ontouchstart" in window; // 判断移动端还是pc端
+    this.autoplay && this.autoPlay();
   },
   methods: {
-    mousedown(e) {
+    // 开始触摸/鼠标按下
+    touchstart(e) {
       this.status = 1;
-      this.oldX = this.startX = e.pageX; // 开始坐标
+      this.oldX = this.startX = this.isMobile
+        ? e.targetTouches[0].pageX
+        : e.pageX; // 开始坐标
+      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
     },
-    mousemove(e) {
+    // 手指触摸/鼠标 滑动
+    touchmove(e) {
       if (e && e.preventDefault) {
         e.preventDefault();
       }
       if (this.status !== 1) return;
-      this.newX = e.pageX;
+      this.newX = this.isMobile ? e.changedTouches[0].pageX : e.pageX;
       if (this.newX < this.oldX) {
         this.left -= this.oldX - this.newX;
       } else {
@@ -64,24 +137,45 @@ export default {
       this.oldX = this.newX;
       this.swiper.style.left = this.left + "px";
     },
-    mouseup(e) {
+    // 手指触摸结束/鼠标抬起
+    touchend(e) {
       this.status = 0;
-      this.movePage(e.pageX);
-    },
-    mouseout() {
-      this.autoMove();
-    },
-    movePage(width) {
-      if (width < this.startX) {
+      const pageX = this.isMobile ? e.changedTouches[0].pageX : e.pageX;
+      if (pageX < this.startX) {
         this.index++;
       } else {
         this.index--;
       }
       if (this.index < 0) {
         this.index = 0;
-      } else if (this.index > this.itemContainer.length - 1) {
-        this.index = this.itemContainer.length - 1;
+      } else if (this.index > this.navCount - 1) {
+        this.index = this.navCount - 1;
       }
+      this.move();
+      this.autoplay && this.autoPlay();
+    },
+    // 左右按钮切换
+    turn(type) {
+      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
+      this.autoplay && this.autoPlay();
+      if (type === "next") {
+        if (this.index >= this.navCount - 1) return;
+        this.index++;
+      } else if (type === "prev") {
+        if (this.index <= 0) return;
+        this.index--;
+      }
+      this.move();
+    },
+    // 跳转到指定位置
+    turnTopage(index) {
+      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
+      this.index = index;
+      this.move();
+      this.autoplay && this.autoPlay();
+    },
+    // 滑动
+    move() {
       this.swiper.className += " move";
       this.swiper.addEventListener("transitionend", () => {
         this.swiper.className = this.swiper.className.replace(/\s+move/, "");
@@ -89,43 +183,90 @@ export default {
       this.left = 0 - this.itemWidth * this.index;
       this.swiper.style.left = this.left + "px";
     },
-    autoMove() {
-      this.timer = setInterval(() => {
+    // 自动切换
+    autoPlay() {
+      this.swiperAutoTimer && clearInterval(this.swiperAutoTimer);
+      this.swiperAutoTimer = setInterval(() => {
         this.index++;
-        if (this.index > this.itemContainer.length - 1) {
+        if (this.index > this.navCount - 1) {
           this.index = 0;
         }
-        this.swiper.className += " move";
-        this.swiper.addEventListener("transitionend", () => {
-          this.swiper.className = this.swiper.className.replace(/\s+move/, "");
-        });
-
-        this.left = 0 - this.itemWidth * this.index;
-        this.swiper.style.left = this.left + "px";
-      }, 2000);
-    },
-    mouseover() {
-      clearInterval(this.timer);
+        this.move();
+      }, this.duration);
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-.swiper {
+.swiper-main {
   position: relative;
   width: 300px;
-  border: 1px solid #f60;
   margin: auto;
-  overflow: hidden;
-  .swiper-container {
+  display: flex;
+  justify-content: center;
+  .swiper {
     position: relative;
+    width: 100%;
+    border: 1px solid #f60;
+    margin: auto;
+    overflow: hidden;
+    .swiper-container {
+      position: relative;
+      display: flex;
+      left: 0px;
+      .swiper-item {
+        flex-shrink: 0;
+        width: 100px;
+        height: 100px;
+        background: #eee;
+      }
+      &.move {
+        transition: all 0.2s ease-in-out;
+      }
+    }
+  }
+  .swiper-btn-prev {
+    position: absolute;
+    cursor: pointer;
+    left: -12px;
+    top: calc(50% - 8px);
+    transform: translateY(-50%);
+    width: 0px;
+    height: 0px;
+    border: 6px solid #000;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    transform: rotate(135deg);
+  }
+  .swiper-btn-next {
+    position: absolute;
+    cursor: pointer;
+    right: -12px;
+    top: calc(50% - 8px);
+    transform: translateY(-50%);
+    width: 0px;
+    height: 0px;
+    border: 6px solid #000;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    transform: rotate(-135deg);
+  }
+  .nav-list {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
     display: flex;
-    left: 0px;
-    .swiper-item {
-      flex-shrink: 0;
-      width: 300px;
-      height: 300px;
-      background: #eee;
+    transform: translateX(-50%);
+    li {
+      cursor: pointer;
+      width: 10px;
+      height: 10px;
+      background-color: rgb(210, 210, 210);
+      margin: 0 5px;
+      border-radius: 5px;
+      &.active {
+        background-color: #f60;
+      }
     }
     &.move {
       transition: all 0.2s ease-in-out;
