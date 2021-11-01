@@ -21,9 +21,11 @@
           :key="item"
           :style="{
             width:
-              Math.ceil((swiperWidth - space * (pageSize - 1)) / pageSize) +
-              'px',
-            marginRight: `${space}px`,
+              Math.ceil(
+                (swiperWidth - spaceBetween * (slidesPerView - 1)) /
+                  slidesPerView
+              ) + 'px',
+            marginRight: `${spaceBetween}px`,
           }"
         >
           {{ item }}
@@ -31,12 +33,12 @@
       </div>
     </div>
     <!-- 左右按钮 -->
-    <template v-if="showBtn">
+    <template v-if="navigation">
       <div class="swiper-btn-prev" @click="turn('prev')"></div>
       <div class="swiper-btn-next" @click="turn('next')"></div>
     </template>
     <!-- 导航按钮 -->
-    <template v-if="showNav">
+    <template v-if="pagination">
       <ul class="nav-list">
         <li
           v-for="(item, navIndex) in navCount"
@@ -69,22 +71,22 @@ export default {
       default: () => [],
       required: true,
     },
-    pageSize: {
+    slidesPerView: {
       // 一屏展示个数
       type: Number,
       default: 1,
     },
-    showNav: {
+    pagination: {
       // 是否展示导航
       type: Boolean,
       default: false,
     },
-    showBtn: {
+    navigation: {
       // 是否展示左右按钮
       type: Boolean,
       default: false,
     },
-    space: {
+    spaceBetween: {
       // 滑块间间隔距离
       type: Number,
       default: 0,
@@ -109,10 +111,12 @@ export default {
     this.itemArr = this.$refs["swiper-item"]; // 滑块集合
     this.$nextTick(() => {
       this.navCount =
-        this.itemArr.length - (this.pageSize - 1) <= 0
+        this.itemArr.length - (this.slidesPerView - 1) <= 0
           ? 1
-          : this.itemArr.length - (this.pageSize - 1);
-      this.itemWidth = Math.ceil(this.itemArr[0].offsetWidth + this.space); // 单个滑块的宽度
+          : this.itemArr.length - (this.slidesPerView - 1);
+      this.itemWidth = Math.ceil(
+        this.itemArr[0].offsetWidth + this.spaceBetween
+      ); // 单个滑块的宽度
       this.left = 0 - this.itemWidth * this.index; // 容器的初始left值
       this.swiper.style.left = this.left + "px"; // 设置容器的初始位置
       this.isMobile = "ontouchstart" in window; // 判断移动端还是pc端

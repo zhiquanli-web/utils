@@ -1,6 +1,14 @@
 <template>
   <div class="home-container">
-    <Swiper :list="data" />
+    <Swiper
+      :list="data"
+      autoplay
+      :slidesPerView="3"
+      pagination
+      navigation
+      :spaceBetween="10"
+      :duration="1000"
+    />
   </div>
 </template>
 
@@ -12,7 +20,7 @@ export default {
   name: "Home",
   data() {
     return {
-      data: [1, 2, 3],
+      data: [1, 2, 3, 4, 5],
     };
   },
 };
