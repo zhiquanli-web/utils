@@ -1,3 +1,5 @@
+import Clipboard from "clipboard";
+
 // 设置一个帧率定时器
 export function setFPS(cb, fps = 60) {
   if (typeof cb !== "function") {
@@ -80,4 +82,20 @@ export function mapFn(keys = [], values = []) {
     maps.set(keys[i], values[i]);
   }
   return maps;
+}
+
+// 复制文本到剪切板
+export function handleClipboard(event, that) {
+  const clipboard = new Clipboard(event.target);
+  console.log("clipboard", clipboard);
+  clipboard.on("success", () => {
+    that.$toast("复制成功");
+    clipboard.destroy();
+  });
+  clipboard.on("error", () => {
+    that.$toast("复制失败, 请重新复制");
+    clipboard.destroy();
+  });
+  !that.isCopy && event.target.click(); // 解决第一次复制不成功问题
+  that.isCopy = true;
 }

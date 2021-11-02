@@ -1,5 +1,6 @@
 <template>
   <div class="home-container">
+    <div @click="handleCopy" data-clipboard-text="复制文案">复制文案</div>
     <!-- <Swiper
       :list="data"
       autoplay
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+import { handleClipboard } from "@/utils";
 export default {
   components: {
     // Swiper: () => import("@/components/Swiper/index.vue"),
@@ -31,11 +33,16 @@ export default {
   },
   mounted() {
     // this.$toast('这是一个消息')
-    this.$confirm({
-      title: "确认删除吗",
-    });
+    // this.$confirm({
+    //   title: "确认删除吗",
+    // });
   },
-  methods: {},
+  methods: {
+    handleCopy($event) {
+      console.log(11, $event);
+      handleClipboard($event, this);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
