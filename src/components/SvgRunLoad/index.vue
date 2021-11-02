@@ -12,7 +12,6 @@
           d="m510.5,1.45313c0,0 -437,121 -442,158c-5,37 28,162 191,176c163,14 284,27 285,88c1,61 -284,197 -350,195c-66,-2 -195,21 -194.5,20.54687"
         />
       </svg>
-
       <div class="sb-group" ref="sb">
         <canvas class="sb-left" ref="sbLeft" v-show="showLeft"></canvas>
         <canvas class="sb-right" ref="sbRight" v-show="!showLeft"></canvas>
@@ -29,7 +28,6 @@ import { setFPS, vpx } from "@/utils";
 import CanvasSprite from "canvas-sprite";
 import clamp from "ramda/src/clamp";
 const pathWidth = 640;
-
 const ranges = [
   {
     start: 0,
@@ -47,7 +45,6 @@ const ranges = [
     dir: "left",
   },
 ];
-
 export default {
   data() {
     return {
@@ -140,7 +137,6 @@ export default {
     stroke-width: 3px;
   }
 }
-
 .sb-group {
   width: vw(180);
   height: vw(180);
@@ -150,7 +146,6 @@ export default {
   transform: translate(-50%);
   margin-top: vw(-180);
   border: 1px solid blue;
-
   > canvas {
     position: absolute;
     top: 0;

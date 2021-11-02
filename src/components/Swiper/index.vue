@@ -1,3 +1,4 @@
+<!-- 滑动轮播组件: 兼容移动端、PC端 -->
 <template>
   <div class="swiper-main">
     <!-- 轮播盒子 -->

@@ -9,9 +9,9 @@
       :spaceBetween="10"
       :duration="1000"
     /> -->
-    <!-- <SvgRunLoad/>
-    <TurnTable /> -->
-    <AnimationFps />
+    <!-- <SvgRunLoad/> -->
+    <!-- <TurnTable /> -->
+    <!-- <AnimationFps /> -->
   </div>
 </template>
 
@@ -21,7 +21,7 @@ export default {
     // Swiper: () => import("@/components/Swiper/index.vue"),
     // SvgRunLoad: () => import("@/components/SvgRunLoad/index.vue"),
     // TurnTable: () => import("@/components/TurnTable/index.vue"),
-    AnimationFps: () => import("@/components/AnimationFps/index.vue"),
+    // AnimationFps: () => import("@/components/AnimationFps/index.vue"),
   },
   name: "Home",
   data() {
@@ -29,7 +29,12 @@ export default {
       data: [1, 2, 3, 4, 5],
     };
   },
-  mounted() {},
+  mounted() {
+    // this.$toast('这是一个消息')
+    this.$confirm({
+      title: "确认删除吗",
+    });
+  },
   methods: {},
 };
 </script>

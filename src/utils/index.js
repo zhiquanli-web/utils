@@ -1,13 +1,13 @@
 // 设置一个帧率定时器
 export function setFPS(cb, fps = 60) {
   if (typeof cb !== "function") {
-    throw Error("cb should be function");
+    throw Error("cb必须是函数类型");
   }
   if (typeof fps !== "number") {
-    throw Error("fps should be number");
+    throw Error("fps必须是数字类型");
   }
   if (fps < 1 || fps > 60) {
-    throw Error("fps should be in range of [1, 60]");
+    throw Error("fps的值应该在[1, 60]之间");
   }
   const interval = parseInt(1000 / Math.min(fps, 60));
   let id = null;
@@ -28,11 +28,8 @@ export function setFPS(cb, fps = 60) {
 }
 
 export function vw(px, base = 750, unit = true) {
-  if (typeof px !== "number") {
-    throw new Error("px is required and should be a number");
-  }
-  if (typeof base !== "number") {
-    throw new Error("base is required and should be a number");
+  if (typeof px !== "number" || typeof base !== "number") {
+    throw Error("px / base 不能为空，并且必须为一个数字");
   }
   return (Math.round(px) / base) * 100 + (unit ? "vw" : "");
 }
@@ -46,9 +43,7 @@ export function vwToPx(value) {
     value = value.replace(/vw$/, "");
   }
   if (!isValidNum(value)) {
-    throw new Error(
-      "value is required and should be a number or value can be parsed by Number()"
-    );
+    throw Error("值不能为空，并且应该是一个数字，或者可以由Number解析的值");
   }
   const oneVw = window.innerWidth / 100;
   return Math.round(oneVw * Number(value));
@@ -67,20 +62,19 @@ function isInt(value) {
 
 // 生成随机整数
 export function randomInt(min, max) {
-  if (!isInt(min)) {
-    throw Error("min should be an integer");
-  }
-  if (!isInt(max)) {
-    throw Error("max should be an integer");
+  if (!isInt(min) || !isInt(max)) {
+    throw Error("min / max 值必须为整数");
   }
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // key -> value 处理
 export function mapFn(keys = [], values = []) {
-  if (!(Array.isArray(keys) && Array.isArray(values))) throw "参数必须为数组";
-  if (keys.length < values.length) throw "keys长度必须大于values长度";
-  if (keys.length === 0 || values.length === 0) throw "参数长度不能为0";
+  if (!(Array.isArray(keys) && Array.isArray(values)))
+    throw Error("参数必须为数组");
+  if (keys.length < values.length) throw Error("keys长度必须大于values长度");
+  if (keys.length === 0 || values.length === 0)
+    throw Error("keys / values 的长度不能为0");
   const maps = new Map();
   for (let i = 0; i < keys.length; i++) {
     maps.set(keys[i], values[i]);

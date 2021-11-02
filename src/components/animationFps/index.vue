@@ -1,3 +1,4 @@
+<!-- 帧动画 -->
 <template>
   <div class="fps-container">
     <canvas id="tree" class="tree"></canvas>
@@ -6,22 +7,20 @@
 
 <script>
 import CanvasSprite from "canvas-sprite";
-import Tree from "@/assets/images/left-tree.png";
 export default {
   name: "fps",
-  data() {
-    return {
-      Tree,
-    };
-  },
-  created() {},
-  computed: {},
+  props: {},
   mounted() {
     this.creatCs();
   },
+  data() {
+    return {
+      treeCs: null,
+    };
+  },
   methods: {
     creatCs() {
-      const treeCs = CanvasSprite({
+      this.treeCs = CanvasSprite({
         canvas: document.getElementById("tree"),
         imageUrl: require("../../assets/images/left-tree.png"),
         frames: 16,
@@ -34,7 +33,6 @@ export default {
           // console.log('end');
         },
       });
-      console.log(treeCs);
     },
   },
 };

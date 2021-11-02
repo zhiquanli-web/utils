@@ -1,3 +1,4 @@
+<!-- 抽奖大转盘组件 -->
 <template>
   <div id="turnBox">
     <!-- 转盘 -->
