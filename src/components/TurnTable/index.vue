@@ -102,9 +102,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@function vw($x, $vpw: 750) {
-  @return ($x / $vpw * 100) * 1vw;
-}
 #turnBox {
   width: vw(630);
   height: vw(630);

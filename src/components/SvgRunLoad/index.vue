@@ -123,9 +123,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@function vw($x, $vpw: 750) {
-  @return ($x / $vpw * 100) * 1vw;
-}
 .road-wrap {
   margin-top: vw(100);
   position: relative;

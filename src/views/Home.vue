@@ -9,8 +9,9 @@
       :spaceBetween="10"
       :duration="1000"
     /> -->
-    <!-- <SvgRunLoad/> -->
-    <TurnTable />
+    <!-- <SvgRunLoad/>
+    <TurnTable /> -->
+    <AnimationFps />
   </div>
 </template>
 
@@ -19,7 +20,8 @@ export default {
   components: {
     // Swiper: () => import("@/components/Swiper/index.vue"),
     // SvgRunLoad: () => import("@/components/SvgRunLoad/index.vue"),
-    TurnTable: () => import("@/components/TurnTable/index.vue"),
+    // TurnTable: () => import("@/components/TurnTable/index.vue"),
+    AnimationFps: () => import("@/components/AnimationFps/index.vue"),
   },
   name: "Home",
   data() {
@@ -27,6 +29,8 @@ export default {
       data: [1, 2, 3, 4, 5],
     };
   },
+  mounted() {},
+  methods: {},
 };
 </script>
 <style lang="scss" scoped>

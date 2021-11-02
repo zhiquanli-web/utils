@@ -1,3 +1,4 @@
+// 设置一个帧率定时器
 export function setFPS(cb, fps = 60) {
   if (typeof cb !== "function") {
     throw Error("cb should be function");
@@ -39,7 +40,7 @@ export function vw(px, base = 750, unit = true) {
 export function isValidNum(value) {
   return !isNaN(Number(value));
 }
-
+// vw -> px
 export function vwToPx(value) {
   if (typeof value === "string") {
     value = value.replace(/vw$/, "");
@@ -57,12 +58,14 @@ export function vpx(value) {
   return vwToPx(vw(value));
 }
 
+// 判断参数是否为整数
 function isInt(value) {
   return (
     typeof value === "number" && isFinite(value) && Math.floor(value) === value
   );
 }
 
+// 生成随机整数
 export function randomInt(min, max) {
   if (!isInt(min)) {
     throw Error("min should be an integer");
@@ -71,4 +74,16 @@ export function randomInt(min, max) {
     throw Error("max should be an integer");
   }
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// key -> value 处理
+export function mapFn(keys = [], values = []) {
+  if (!(Array.isArray(keys) && Array.isArray(values))) throw "参数必须为数组";
+  if (keys.length < values.length) throw "keys长度必须大于values长度";
+  if (keys.length === 0 || values.length === 0) throw "参数长度不能为0";
+  const maps = new Map();
+  for (let i = 0; i < keys.length; i++) {
+    maps.set(keys[i], values[i]);
+  }
+  return maps;
 }

@@ -6,7 +6,7 @@ module.exports = {
   css: {
     loaderOptions: {
       scss: {
-        additionalData: `@import "./src/assets/styles/vw.scss";`,
+        data: `@import "@/assets/styles/vw.scss";`,
       },
     },
   },
