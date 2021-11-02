@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <Swiper
+    <!-- <Swiper
       :list="data"
       autoplay
       :slidesPerView="3"
@@ -8,14 +8,18 @@
       navigation
       :spaceBetween="10"
       :duration="1000"
-    />
+    /> -->
+    <!-- <SvgRunLoad/> -->
+    <TurnTable />
   </div>
 </template>
 
 <script>
 export default {
   components: {
-    Swiper: () => import("@/components/Swiper/index.vue"),
+    // Swiper: () => import("@/components/Swiper/index.vue"),
+    // SvgRunLoad: () => import("@/components/SvgRunLoad/index.vue"),
+    TurnTable: () => import("@/components/TurnTable/index.vue"),
   },
   name: "Home",
   data() {
