@@ -24,7 +24,8 @@
             width:
               Math.ceil(
                 (swiperWidth - spaceBetween * (slidesPerView - 1)) /
-                  slidesPerView
+                  slidesPerView -
+                  0.5
               ) + 'px',
             marginRight: `${spaceBetween}px`,
           }"
@@ -103,7 +104,7 @@ export default {
       oldX: 0, // 起点坐标
       newX: 0, // 新坐标
       navCount: 1, // 导航栏个数
-      swiperWidth: "100%", //容器默认宽度
+      swiperWidth: 0, //容器默认宽度
     };
   },
   mounted() {
@@ -127,6 +128,9 @@ export default {
   methods: {
     // 开始触摸/鼠标按下
     touchstart(e) {
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
       this.status = 1;
       this.oldX = this.startX = this.isMobile
         ? e.targetTouches[0].pageX
@@ -141,9 +145,14 @@ export default {
       if (this.status !== 1) return;
       this.newX = this.isMobile ? e.changedTouches[0].pageX : e.pageX;
       if (this.newX < this.oldX) {
-        this.left -= this.oldX - this.newX;
+        const width = this.oldX - this.newX;
+        this.left -=
+          this.index === this.list.length - this.slidesPerView
+            ? width / 3
+            : width;
       } else {
-        this.left += this.newX - this.oldX;
+        const width = this.newX - this.oldX;
+        this.left += this.index === 0 ? width / 3 : width;
       }
       this.oldX = this.newX;
       this.swiper.style.left = this.left + "px";
@@ -221,11 +230,13 @@ export default {
     border: 1px solid #f60;
     margin: auto;
     overflow: hidden;
+    box-sizing: border-box;
     .swiper-container {
       position: relative;
       display: flex;
       left: 0px;
       .swiper-item {
+        box-sizing: border-box;
         flex-shrink: 0;
         width: 100px;
         height: 100px;

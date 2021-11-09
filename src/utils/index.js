@@ -87,7 +87,6 @@ export function mapFn(keys = [], values = []) {
 // 复制文本到剪切板
 export function handleClipboard(event, that) {
   const clipboard = new Clipboard(event.target);
-  console.log("clipboard", clipboard);
   clipboard.on("success", () => {
     that.$toast("复制成功");
     clipboard.destroy();
@@ -98,4 +97,24 @@ export function handleClipboard(event, that) {
   });
   !that.isCopy && event.target.click(); // 解决第一次复制不成功问题
   that.isCopy = true;
+}
+
+// 获取图片宽高
+export function getImgWAndH(src) {
+  if (typeof src !== "string") throw Error("src为图片路径");
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      resolve({
+        width: img.width,
+        height: img.height,
+      });
+    };
+  });
+}
+
+// 是否是IOS
+export function isIOS() {
+  return /(iPhone|iPad); /i.test(navigator.userAgent);
 }

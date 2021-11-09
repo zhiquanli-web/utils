@@ -1,15 +1,16 @@
 <template>
   <div class="home-container">
     <div @click="handleCopy" data-clipboard-text="复制文案">复制文案</div>
+    <!-- <ClickOutside  @click-outside="handleClick"> -->
     <!-- <Swiper
       :list="data"
-      autoplay
       :slidesPerView="3"
       pagination
       navigation
       :spaceBetween="10"
       :duration="1000"
     /> -->
+    <!-- </ClickOutside> -->
     <!-- <SvgRunLoad/> -->
     <!-- <TurnTable /> -->
     <!-- <AnimationFps /> -->
@@ -21,6 +22,7 @@ import { handleClipboard } from "@/utils";
 export default {
   components: {
     // Swiper: () => import("@/components/Swiper/index.vue"),
+    // ClickOutside: () => import("@/components/ClickOutside/index.vue"),
     // SvgRunLoad: () => import("@/components/SvgRunLoad/index.vue"),
     // TurnTable: () => import("@/components/TurnTable/index.vue"),
     // AnimationFps: () => import("@/components/AnimationFps/index.vue"),
@@ -39,7 +41,6 @@ export default {
   },
   methods: {
     handleCopy($event) {
-      console.log(11, $event);
       handleClipboard($event, this);
     },
   },
