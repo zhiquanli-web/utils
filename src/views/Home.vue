@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <div @click="handleCopy" data-clipboard-text="复制文案">复制文案</div>
+    <!-- <div @click="handleCopy" data-clipboard-text="复制文案">复制文案</div> -->
     <!-- <ClickOutside  @click-outside="handleClick"> -->
     <!-- <Swiper
       :list="data"
@@ -14,6 +14,7 @@
     <!-- <SvgRunLoad/> -->
     <!-- <TurnTable /> -->
     <!-- <AnimationFps /> -->
+    <WaterFlip />
   </div>
 </template>
 
@@ -26,6 +27,7 @@ export default {
     // SvgRunLoad: () => import("@/components/SvgRunLoad/index.vue"),
     // TurnTable: () => import("@/components/TurnTable/index.vue"),
     // AnimationFps: () => import("@/components/AnimationFps/index.vue"),
+    WaterFlip: () => import("@/components/WaterFlip/index.vue"),
   },
   name: "Home",
   data() {

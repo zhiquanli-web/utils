@@ -74,7 +74,7 @@ export function randomInt(min, max) {
 export function mapFn(keys = [], values = []) {
   if (!(Array.isArray(keys) && Array.isArray(values)))
     throw Error("参数必须为数组");
-  if (keys.length < values.length) throw Error("keys长度必须大于values长度");
+  if (keys.length < values.length) throw Error("keys长度必须不小于values长度");
   if (keys.length === 0 || values.length === 0)
     throw Error("keys / values 的长度不能为0");
   const maps = new Map();
@@ -117,4 +117,33 @@ export function getImgWAndH(src) {
 // 是否是IOS
 export function isIOS() {
   return /(iPhone|iPad); /i.test(navigator.userAgent);
+}
+
+// 防抖
+export function debounce(fn, delay = 500) {
+  if (Object.prototype.toString.call(fn) !== "[object Function]")
+    throw Error("请传入函数!");
+  let timer = null;
+  return function debounceFn(...args) {
+    const context = this;
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.call(context, ...args);
+    }, delay);
+  };
+}
+
+// 防止异步函数重复调用 - 异步函数开始执行时就会被加锁，直到执行完毕才会解锁
+export function preventRepeat(fn) {
+  if (typeof fn !== "function") {
+    throw Error("请传入函数!");
+  }
+  let lock = false;
+  return async function (...args) {
+    if (lock) return;
+    lock = true;
+    const context = this;
+    await fn.call(context, ...args);
+    lock = false;
+  };
 }
