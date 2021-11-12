@@ -4,7 +4,7 @@
     <!-- <ClickOutside  @click-outside="handleClick"> -->
     <!-- <Swiper
       :list="data"
-      :slidesPerView="3"
+      :slidesPerView="1"
       pagination
       navigation
       :spaceBetween="10"
@@ -14,7 +14,9 @@
     <!-- <SvgRunLoad/> -->
     <!-- <TurnTable /> -->
     <!-- <AnimationFps /> -->
-    <WaterFlip />
+    <!-- <WaterFlip /> -->
+    <!-- <CanvasDrag /> -->
+    <Slide />
   </div>
 </template>
 
@@ -27,7 +29,9 @@ export default {
     // SvgRunLoad: () => import("@/components/SvgRunLoad/index.vue"),
     // TurnTable: () => import("@/components/TurnTable/index.vue"),
     // AnimationFps: () => import("@/components/AnimationFps/index.vue"),
-    WaterFlip: () => import("@/components/WaterFlip/index.vue"),
+    // WaterFlip: () => import("@/components/WaterFlip/index.vue"),
+    // CanvasDrag: () => import("@/components/CanvasDrag/index.vue"),
+    Slide: () => import("@/components/Slide/index.vue"),
   },
   name: "Home",
   data() {
