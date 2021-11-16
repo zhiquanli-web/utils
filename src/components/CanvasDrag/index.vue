@@ -1,55 +1,74 @@
 <template>
-  <div class="zrender">
-    <div id="zrender-canvas"></div>
+  <div class="container">
+    <div class="content"></div>
   </div>
 </template>
 
 <script>
-import man_1 from "@/assets/images/man_1.jpeg";
+import TouchKit from "@/utils/touchkit.js";
+import man_1 from "@/assets/images/man_1.jpg";
+import man_2 from "@/assets/images/man_2.jpg";
 export default {
-  name: "zrender",
   data() {
-    return {
-      zr: null,
-      group: null,
-    };
+    return {};
   },
-  created() {},
   mounted() {
-    const zr = zrender.init(document.getElementById("zrender-canvas"));
-    const group = new zrender.Group({
-      slient: true, //组内子元素是否响应鼠标事件
+    const dom = new TouchKit({
+      el: ".content",
+      event: {},
+      limit: {
+        x: 0,
+        y: 0,
+      },
+      close: true,
     });
-    const img = new zrender.Image({
-      style: {
+    dom
+      .add({
         image: man_1,
-        x: 10,
-        y: 10,
-        width: 100,
-        height: 100,
-      },
-      draggable: true,
-      onclick: function () {
-        console.log("点击事件");
-      },
-      //鼠标在松开移动的事件
-      onmouseup: function (e) {
-        console.log("鼠标在松开移动的事件", e);
-      },
-      //鼠标在移动中的事件
-      onmouseover: function (params) {
-        console.log("鼠标在移动中的事件", params);
-      },
-    });
-    group.add(img);
-    zr.add(group);
+        width: "100px",
+        use: {
+          drag: true,
+          pinch: false,
+          rotate: false,
+          singlePinch: false,
+          singleRotate: false,
+          pos: {
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotate: 0,
+          },
+        },
+      })
+      .add({
+        image: man_2,
+        width: "100px",
+        use: {
+          drag: true,
+          pinch: false,
+          rotate: false,
+          singlePinch: false,
+          singleRotate: false,
+          pos: {
+            x: 0,
+            y: 0,
+            scale: 1,
+            rotate: 0,
+          },
+        },
+      });
   },
-  methods: {},
 };
 </script>
 
-<style>
-#zrender-canvas {
-  height: 700px;
+<style lang="scss" scoped>
+.container {
+  height: 100%;
+  .content {
+    width: 400px;
+    height: 400px;
+    margin: 50px auto;
+    border: 1px solid #f60;
+  }
 }
 </style>
