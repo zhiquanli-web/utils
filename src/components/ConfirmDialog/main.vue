@@ -21,7 +21,7 @@ export default {
   name: "confirm",
   data() {
     return {
-      isShow: true,
+      isShow: false,
       options: {
         title: "是否确认",
         cancel: true,
@@ -41,10 +41,6 @@ export default {
       this.confirm();
       this.isShow = false;
       this.destroyElement();
-    },
-    destroyElement() {
-      this.$destroy();
-      this.$el.parentNode.removeChild(this.$el);
     },
   },
 };

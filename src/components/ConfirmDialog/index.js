@@ -1,28 +1,30 @@
-import Vue from "vue";
-import Confirm from "@/components/ConfirmDialog/main";
+import Vue from 'vue';
+import Confirm from '@/components/ConfirmDialog/main.vue';
 
-let ConfirmConstrutor = Vue.extend(Confirm);
 let instance = null;
-
-const ConfirmDialog = (options = {}) => {
-  if (typeof options !== "object") {
-    return new Error("参数必须是对象");
+const ConfirmDialog = (options = { isShow: false }) => {
+  if (typeof options !== 'object') {
+    return new Error('参数必须是对象');
   }
-  return new Promise((resolve) => {
-    instance = new ConfirmConstrutor({
-      data: {
-        options: {
-          ...options,
-        },
-      },
-      el: document.createElement("div"),
+  return new Promise(resolve => {
+    if (!instance) {
+      const ConfirmConstructor = Vue.extend(Confirm);
+      instance = new ConfirmConstructor();
+      instance.$mount();
+      document.body.appendChild(instance.$el);
+    }
+    instance.options = {
+      ...instance.options,
+      ...options
+    };
+    Object.keys(options).forEach(k => {
+      instance[k] = options[k];
     });
-    document.body.appendChild(instance.$el);
     instance.confirm = function () {
-      resolve("confirm");
+      resolve('confirm');
     };
     instance.cancel = function () {
-      resolve("cancel");
+      resolve('cancel');
     };
   });
 };
