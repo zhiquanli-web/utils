@@ -1,4 +1,4 @@
-<!-- 外部点击事件 -->
+<!-- 外部点击事件组件 -->
 <template>
   <component :is="tag" ref="container">
     <slot></slot>

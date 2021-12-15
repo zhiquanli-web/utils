@@ -1,3 +1,4 @@
+<!-- svg路径行走 -->
 <template>
   <div>
     <h1>SVG路径行走</h1>
