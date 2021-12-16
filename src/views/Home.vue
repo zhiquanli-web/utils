@@ -15,7 +15,7 @@
     <!-- <TurnTable /> -->
     <!-- <AnimationFps /> -->
     <!-- <WaterFlip /> -->
-    <CanvasDrag />
+    <!-- <CanvasDrag /> -->
     <!-- <Slide /> -->
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
     // TurnTable: () => import("@/components/TurnTable/index.vue"),
     // AnimationFps: () => import("@/components/AnimationFps/index.vue"),
     // WaterFlip: () => import("@/components/WaterFlip/index.vue"),
-    CanvasDrag: () => import("@/components/CanvasDrag/index.vue"),
+    // CanvasDrag: () => import("@/components/CanvasDrag/index.vue"),
     // Slide: () => import("@/components/Slide/index.vue"),
   },
   name: "Home",

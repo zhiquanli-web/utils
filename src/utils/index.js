@@ -99,8 +99,8 @@ export function handleClipboard(event, that) {
   that.isCopy = true;
 }
 
-// 获取图片宽高
-export function getImgWAndH(src) {
+// 图片加载
+export function reloadImage(src) {
   if (typeof src !== "string") throw Error("src为图片路径");
   return new Promise((resolve) => {
     const img = new Image();

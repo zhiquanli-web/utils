@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { getImgWAndH } from "@/utils";
+import { reloadImage } from "@/utils";
 export default {
   name: "water",
   data() {
@@ -67,7 +67,7 @@ export default {
       }
       for (let i = 0; i < this.initData.length; i++) {
         const obj = {};
-        const { height, width } = await getImgWAndH(this.initData[i]);
+        const { height, width } = await reloadImage(this.initData[i]);
         obj.height = (this.itemWidth / width) * height;
         obj.src = this.initData[i];
         const index = this.columnHeight.indexOf(
