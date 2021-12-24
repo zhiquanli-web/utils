@@ -107,10 +107,7 @@ export function reloadImage(src) {
     const img = new Image();
     img.src = src;
     img.onload = () => {
-      resolve({
-        width: img.width,
-        height: img.height,
-      });
+      resolve(img);
     };
   });
 }

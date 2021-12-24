@@ -17,6 +17,7 @@
     <!-- <WaterFlip /> -->
     <!-- <CanvasDrag /> -->
     <!-- <Slide /> -->
+    <TouchKit />
   </div>
 </template>
 
@@ -32,6 +33,7 @@ export default {
     // WaterFlip: () => import("@/components/WaterFlip/index.vue"),
     // CanvasDrag: () => import("@/components/CanvasDrag/index.vue"),
     // Slide: () => import("@/components/Slide/index.vue"),
+    TouchKit: () => import("@/components/TouchKit/main.vue"),
   },
   name: "Home",
   data() {
