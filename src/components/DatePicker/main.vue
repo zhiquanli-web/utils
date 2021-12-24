@@ -7,6 +7,7 @@
       placeholder="日期和时间选择特效"
       data-lcalendar="2000-05-11,2055-05-11"
     />
+    <button @click="click">保存</button>
   </div>
 </template>
 
@@ -15,10 +16,8 @@ import Lcalendar from "./index";
 export default {
   name: "date-picker",
   data() {
-    return {};
-  },
-  created() {
-    console.log("Lcalendar", Lcalendar);
+    return {
+    };
   },
   mounted() {
     this.calendar = new Lcalendar();
@@ -30,7 +29,11 @@ export default {
     });
   },
   computed: {},
-  methods: {},
+  methods: {
+    click() {
+      console.log(this.calendar.getValue());
+    }
+  },
 };
 </script>
 
