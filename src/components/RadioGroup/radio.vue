@@ -1,4 +1,4 @@
-<!-- 单选框 -->
+<!-- 单选按钮 -->
 <template>
   <label
     role="radio"
@@ -81,7 +81,6 @@ export default {
       });
     },
     dispatch(componentName, eventName, params) {
-      console.log("componentName", componentName, eventName, params);
       var parent = this.$parent || this.$root;
       var name = parent.$options.componentName;
       while (parent && (!name || name !== componentName)) {

@@ -1,3 +1,4 @@
+<!-- 单选按钮组 -->
 <template>
   <section class="radio-group-container">
     <slot />

@@ -21,7 +21,7 @@
     <!-- <DatePicker /> -->
     <!-- <radio label="1" v-model="value">A</radio>
     <radio label="2" v-model="value">B</radio> -->
-    <RadioGroup v-model="value" @change="change">
+    <RadioGroup v-model="value">
       <radio label="1"></radio>
       <radio label="2"></radio>
       <radio label="3"></radio>
@@ -62,10 +62,7 @@ export default {
   methods: {
     handleCopy($event) {
       handleClipboard($event, this);
-    },
-    change(val) {
-      console.log("val", val);
-    },
+    }
   },
 };
 </script>
