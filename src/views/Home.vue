@@ -21,11 +21,17 @@
     <!-- <DatePicker /> -->
     <!-- <radio label="1" v-model="value">A</radio>
     <radio label="2" v-model="value">B</radio> -->
-    <RadioGroup v-model="value">
+    <!-- <RadioGroup v-model="value">
       <radio label="1"></radio>
       <radio label="2"></radio>
       <radio label="3"></radio>
-    </RadioGroup>
+    </RadioGroup> -->
+    <!-- <checkbox v-model="checked1">复选框A</checkbox>
+    <checkbox v-model="checked2">复选框B</checkbox> -->
+    <CheckboxGroup v-model="checkList" @change="change">
+      <checkbox label="复选框A"></checkbox>
+      <checkbox label="复选框B"></checkbox>
+    </CheckboxGroup>
   </div>
 </template>
 
@@ -43,13 +49,17 @@ export default {
     // Slide: () => import("@/components/Slide/index.vue"),
     // TouchKit: () => import("@/components/TouchKit/main.vue"),
     // DatePicker: () => import("@/components/DatePicker/main.vue"),
-    radio: () => import("@/components/Radio/radio.vue"),
-    RadioGroup: () => import("@/components/Radio/radio-group.vue"),
+    // radio: () => import("@/components/Radio/radio.vue"),
+    // RadioGroup: () => import("@/components/Radio/radio-group.vue"),
+    checkbox: () => import("@/components/Checkbox/checkbox.vue"),
+    CheckboxGroup: () => import("@/components/Checkbox/checkbox-group.vue"),
   },
   name: "Home",
   data() {
     return {
-      value: "1",
+      checked1: false,
+      checked2: true,
+      checkList: ["复选框A", "复选框B"],
       // data: [1, 2, 3, 4, 5],
     };
   },
@@ -62,7 +72,10 @@ export default {
   methods: {
     handleCopy($event) {
       handleClipboard($event, this);
-    }
+    },
+    change(val) {
+      console.log('val', val);
+    },
   },
 };
 </script>

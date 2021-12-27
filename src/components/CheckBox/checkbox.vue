@@ -1,14 +1,14 @@
 <template>
   <label
-    role="radio"
-    class="radio-container"
-    :class="{ 'is-checked': model === label, 'is-disabled': isDisabled }"
+    role="checkbox"
+    class="checkbox-container"
+    :class="{ 'is-checked': isChecked, 'is-disabled': isDisabled }"
   >
-    <span class="radio-icon"></span>
+    <span class="checkbox-icon"></span>
     <input
-      type="radio"
-      ref="radio"
-      class="radio"
+      type="checkbox"
+      ref="checkbox"
+      class="checkbox"
       :name="name"
       :value="label"
       v-model="model"
@@ -24,54 +24,68 @@
 
 <script>
 export default {
-  name: "radio",
+  name: "checkbox",
   props: {
-    label: {
-      type: [Number, String],
-      required: true,
-    },
-    value: [Number, String],
+    label: {},
+    value: {},
     name: String,
     disabled: Boolean,
   },
+  data() {
+    return {
+      selfModel: false,
+    };
+  },
   computed: {
+    model: {
+      get() {
+        return this.isGroup ? this.store : this.value || this.selfModel;
+      },
+      set(val) {
+        if (this.isGroup) {
+          this.dispatch("checkBoxGroup", "input", [val]);
+        } else {
+          this.$emit("input", val);
+          this.selfModel = val;
+        }
+      },
+    },
+    store() {
+      return this.checkboxGroup ? this.checkboxGroup.value : this.value;
+    },
     isGroup() {
       let parent = this.$parent;
       while (parent) {
-        if (parent.$options.componentName !== "radioGroup") {
+        if (parent.$options.componentName !== "checkBoxGroup") {
           parent = parent.$parent;
         } else {
-          this.radioGroup = parent;
+          this.checkboxGroup = parent;
           return true;
         }
       }
       return false;
     },
-    model: {
-      get() {
-        return this.isGroup ? this.radioGroup.value : this.value;
-      },
-      set(val) {
-        if (this.isGroup) {
-          this.dispatch("radioGroup", "input", [val]);
-        } else {
-          this.$emit("input", val);
-        }
-        this.$refs.radio &&
-          (this.$refs.radio.checked = this.model === this.label);
-      },
+    isChecked() {
+      if ({}.toString.call(this.model) === "[object Boolean]") {
+        return this.model;
+      } else if (Array.isArray(this.model)) {
+        return this.model.indexOf(this.label) > -1;
+      } else if (this.model !== null && this.model !== undefined) {
+        return false;
+      }
     },
     isDisabled() {
       return this.isGroup
-        ? this.radioGroup.disabled || this.disabled
+        ? this.checkboxGroup.disabled || this.disabled
         : this.disabled;
     },
   },
   methods: {
-    handleChange() {
+    handleChange(event) {
       this.$nextTick(() => {
-        this.$emit("change", this.model);
-        this.isGroup && this.dispatch("radioGroup", "handleChange", this.model);
+        this.$emit("change", event.target.checked, event);
+        this.isGroup &&
+          this.dispatch("checkBoxGroup", "change", [this.checkboxGroup.value]);
       });
     },
     dispatch(componentName, eventName, params) {
@@ -92,25 +106,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.radio-container {
+.checkbox-container {
   font-size: vw(30);
   cursor: pointer;
   outline: none;
   display: inline-block;
   text-align: left;
   margin-right: vw(14);
-  .radio-icon {
+  .checkbox-icon {
     width: vw(30);
     height: vw(30);
     display: inline-block;
     border: 1px solid #b1906b;
-    border-radius: 50%;
+    border-radius: vw(8);
     margin-right: vw(6);
     vertical-align: middle;
   }
   &.is-checked {
     color: #fb8241;
-    .radio-icon {
+    .checkbox-icon {
       border-color: transparent;
       background-color: #fb8241;
       position: relative;
@@ -133,7 +147,7 @@ export default {
     opacity: 0.6;
     cursor: no-drop;
   }
-  .radio {
+  .checkbox {
     display: none;
     outline: none;
   }
