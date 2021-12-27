@@ -18,7 +18,14 @@
     <!-- <CanvasDrag /> -->
     <!-- <Slide /> -->
     <!-- <TouchKit /> -->
-    <DatePicker />
+    <!-- <DatePicker /> -->
+    <!-- <radio label="1" v-model="value">A</radio>
+    <radio label="2" v-model="value">B</radio> -->
+    <RadioGroup v-model="value" @change="change">
+      <radio label="1"></radio>
+      <radio label="2"></radio>
+      <radio label="3"></radio>
+    </RadioGroup>
   </div>
 </template>
 
@@ -35,11 +42,14 @@ export default {
     // CanvasDrag: () => import("@/components/CanvasDrag/index.vue"),
     // Slide: () => import("@/components/Slide/index.vue"),
     // TouchKit: () => import("@/components/TouchKit/main.vue"),
-    DatePicker: () => import("@/components/DatePicker/main.vue"),
+    // DatePicker: () => import("@/components/DatePicker/main.vue"),
+    radio: () => import("@/components/RadioGroup/radio.vue"),
+    RadioGroup: () => import("@/components/RadioGroup/radio-group.vue"),
   },
   name: "Home",
   data() {
     return {
+      value: "1",
       // data: [1, 2, 3, 4, 5],
     };
   },
@@ -52,6 +62,9 @@ export default {
   methods: {
     handleCopy($event) {
       handleClipboard($event, this);
+    },
+    change(val) {
+      console.log("val", val);
     },
   },
 };
