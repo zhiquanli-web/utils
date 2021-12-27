@@ -43,8 +43,8 @@ export default {
     // Slide: () => import("@/components/Slide/index.vue"),
     // TouchKit: () => import("@/components/TouchKit/main.vue"),
     // DatePicker: () => import("@/components/DatePicker/main.vue"),
-    radio: () => import("@/components/RadioGroup/radio.vue"),
-    RadioGroup: () => import("@/components/RadioGroup/radio-group.vue"),
+    radio: () => import("@/components/Radio/radio.vue"),
+    RadioGroup: () => import("@/components/Radio/radio-group.vue"),
   },
   name: "Home",
   data() {
