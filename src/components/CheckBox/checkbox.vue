@@ -121,6 +121,7 @@ export default {
     border-radius: vw(8);
     margin-right: vw(6);
     vertical-align: middle;
+    transition: background-color .3s linear;
   }
   &.is-checked {
     color: #fb8241;

@@ -107,6 +107,7 @@ export default {
     border-radius: 50%;
     margin-right: vw(6);
     vertical-align: middle;
+    transition: background-color .3s linear;
   }
   &.is-checked {
     color: #fb8241;
