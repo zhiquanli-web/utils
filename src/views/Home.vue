@@ -28,10 +28,15 @@
     </RadioGroup> -->
     <!-- <checkbox v-model="checked1">复选框A</checkbox>
     <checkbox v-model="checked2">复选框B</checkbox> -->
-    <CheckboxGroup v-model="checkList" @change="change">
+    <!-- <CheckboxGroup v-model="checkList" @change="change">
       <checkbox label="复选框A"></checkbox>
       <checkbox label="复选框B"></checkbox>
-    </CheckboxGroup>
+    </CheckboxGroup> -->
+    <l-select v-model="value">
+      <l-option v-for="item in list" :key="item.value" :value="item.value">
+        {{ item.label }}
+      </l-option>
+    </l-select>
   </div>
 </template>
 
@@ -51,8 +56,10 @@ export default {
     // DatePicker: () => import("@/components/DatePicker/main.vue"),
     // radio: () => import("@/components/Radio/radio.vue"),
     // RadioGroup: () => import("@/components/Radio/radio-group.vue"),
-    checkbox: () => import("@/components/Checkbox/checkbox.vue"),
-    CheckboxGroup: () => import("@/components/Checkbox/checkbox-group.vue"),
+    // checkbox: () => import("@/components/Checkbox/checkbox.vue"),
+    // CheckboxGroup: () => import("@/components/Checkbox/checkbox-group.vue"),
+    LSelect: () => import("@/components/Select/select.vue"),
+    LOption: () => import("@/components/Select/options.vue")
   },
   name: "Home",
   data() {
@@ -60,6 +67,16 @@ export default {
       checked1: false,
       checked2: true,
       checkList: ["复选框A", "复选框B"],
+      value: 1,
+      list: [
+        {label: '选项1', value: 1},
+        {label: '选项2', value: 2},
+        {label: '选项3', value: 3},
+        {label: '选项4', value: 4},
+        {label: '选项5', value: 5},
+        {label: '选项6', value: 6},
+        {label: '选项7', value: 7},
+      ]
       // data: [1, 2, 3, 4, 5],
     };
   },

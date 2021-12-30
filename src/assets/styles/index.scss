@@ -17,6 +17,11 @@ ul,
 li {
   list-style: none;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
+
 .gearDatetime,
 .gearDate {
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
