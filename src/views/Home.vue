@@ -19,24 +19,6 @@
     <!-- <Slide /> -->
     <!-- <TouchKit /> -->
     <!-- <DatePicker /> -->
-    <!-- <radio label="1" v-model="value">A</radio>
-    <radio label="2" v-model="value">B</radio> -->
-    <!-- <RadioGroup v-model="value">
-      <radio label="1"></radio>
-      <radio label="2"></radio>
-      <radio label="3"></radio>
-    </RadioGroup> -->
-    <!-- <checkbox v-model="checked1">复选框A</checkbox>
-    <checkbox v-model="checked2">复选框B</checkbox> -->
-    <!-- <CheckboxGroup v-model="checkList" @change="change">
-      <checkbox label="复选框A"></checkbox>
-      <checkbox label="复选框B"></checkbox>
-    </CheckboxGroup> -->
-    <l-select v-model="value">
-      <l-option v-for="item in list" :key="item.value" :value="item.value">
-        {{ item.label }}
-      </l-option>
-    </l-select>
   </div>
 </template>
 
@@ -54,12 +36,6 @@ export default {
     // Slide: () => import("@/components/Slide/index.vue"),
     // TouchKit: () => import("@/components/TouchKit/main.vue"),
     // DatePicker: () => import("@/components/DatePicker/main.vue"),
-    // radio: () => import("@/components/Radio/radio.vue"),
-    // RadioGroup: () => import("@/components/Radio/radio-group.vue"),
-    // checkbox: () => import("@/components/Checkbox/checkbox.vue"),
-    // CheckboxGroup: () => import("@/components/Checkbox/checkbox-group.vue"),
-    LSelect: () => import("@/components/Select/select.vue"),
-    LOption: () => import("@/components/Select/options.vue")
   },
   name: "Home",
   data() {
