@@ -5,14 +5,14 @@
  * @Last Modified time: 2022-06-Th 04:52:15 
  */
 
-function hyDeepClone(obj) {
+function deepClone(obj) {
   if (obj === null || typeof obj !== 'object') {
     return obj;
   }
   const newObj = obj instanceof Array ? [] : {};
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
-      newObj[key] = hyDeepClone(obj[key]);
+      newObj[key] = deepClone(obj[key]);
     }
   }
   return newObj;
@@ -29,7 +29,7 @@ const obj  = {
   }
 }
 
-const newObj = hyDeepClone(obj);
+const newObj = deepClone(obj);
 
 newObj.name = 'lisi';
 
