@@ -22,3 +22,28 @@ class Depend {
     })
   }
 }
+
+// test
+const depend = new Depend()
+function watchFn(fn) {
+  depend.addDepend(fn)
+}
+
+
+const obj = {
+  name: "why",
+  age: 18
+}
+
+watchFn(function() {
+  const newName = obj.name
+  console.log("你好啊, 李银河", newName)
+})
+
+watchFn(function() {
+  console.log(obj.name, "demo function -------")
+})
+
+obj.name = "kobe"
+depend.notify()
+
