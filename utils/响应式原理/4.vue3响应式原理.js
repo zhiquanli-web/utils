@@ -9,7 +9,7 @@ class Depend {
   // 收集依赖
   depend() {
     if (activeReactiveFn) {
-      this.reactiveFns.add(this.activeReactiveFn);
+      this.reactiveFns.add(activeReactiveFn);
     }
   }
 
